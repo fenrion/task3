@@ -1,7 +1,13 @@
 package task3.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import task3.dto.ActorDTO;
+import task3.dto.ActorOneDTO;
+import task3.dto.ActorSingleDTO;
+import task3.dto.ActorUpdateDTO;
 import task3.mapper.ActorMapper;
 import task3.models.Actor;
 import task3.services.ActorService;
@@ -9,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 
 @RestController
@@ -16,6 +25,7 @@ import java.util.List;
 public class ActorController {
     private final ActorService  actorService;
     private final ActorMapper actorMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public ActorController(ActorService actorService, ActorMapper actorMapper) {
@@ -23,29 +33,38 @@ public class ActorController {
         this.actorMapper = actorMapper;
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "hello people";
-    }
-
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ActorDTO> findAll(){
+    public ResponseEntity<String> findAll() throws JsonProcessingException {
         List<Actor> actors = actorService.findAll();
-        System.out.println(actors);
         List<ActorDTO> actorDTOList = actorMapper.toActorDTOList(actors);
-        System.out.println(actorDTOList);
-        return actorDTOList;
+        return ResponseEntity.ok().body(objectMapper.writeValueAsString(actorDTOList));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ActorDTO> findById(@PathVariable int id){
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> findById(@PathVariable int id) throws JsonProcessingException {
         Actor actor = actorService.findOneById(id);
+        ActorOneDTO actorOneDTO = actorMapper.toActorOneDTO(actor);
         if (actor!=null){
-            System.out.println(actor);
-            return ResponseEntity.ok(actorMapper.toActorDTO(actor));
+            return ResponseEntity.ok().body(objectMapper.writeValueAsString(actorOneDTO));
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<HttpStatus> create(@RequestBody ActorSingleDTO actorSingleDTO){
+        Actor actor = actorMapper.toActorFromActorSingleDTO(actorSingleDTO);
+        System.out.println("after mapper");
+        actorService.save(actor);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PatchMapping(value = "/update/{id}",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<HttpStatus> update(@PathVariable int id, @RequestBody ActorSingleDTO actorDTO){
+        Actor actor = actorMapper.toActorFromActorSingleDTO(actorDTO);
+        System.out.println(actor);
+        actorService.update(id,actor);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

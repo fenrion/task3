@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
  * Many to One (Actor)
  */
 @Entity
-@Table(name = "phone_nuumbers")
+@Table(name = "phone_numbers")
 public class PhoneNumber {
     @Id
     @Column(name = "ph_id")
@@ -51,5 +51,33 @@ public class PhoneNumber {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    @Override
+    public String toString() {
+        return "PhoneNumber{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PhoneNumber that = (PhoneNumber) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (actor != null ? !actor.equals(that.actor) : that.actor != null) return false;
+        return number != null ? number.equals(that.number) : that.number == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (actor != null ? actor.hashCode() : 0);
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        return result;
     }
 }

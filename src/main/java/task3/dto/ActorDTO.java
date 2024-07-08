@@ -6,17 +6,15 @@ import task3.models.PhoneNumber;
 import java.util.List;
 
 public class ActorDTO {
+    private int id;
     private String name;
-    //private List<Movie> movies;
-    //private List<PhoneNumber> phoneNumbers;
 
     public ActorDTO() {
     }
 
-    public ActorDTO(String name) {
+    public ActorDTO(String name, int id) {
         this.name = name;
-        //this.movies = movies;
-        //this.phoneNumbers = phoneNumbers;
+        this.id = id;
     }
 
     public String getName() {
@@ -27,10 +25,11 @@ public class ActorDTO {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "ActorDTO{" +
-                "name='" + name + '\'' +
-                '}';
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -3,7 +3,9 @@ package task3.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Actor entity
@@ -27,7 +29,7 @@ public class Actor {
     @JoinTable(
             name = "actors_movies",
             joinColumns = @JoinColumn(name = "actor_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id")
+            inverseJoinColumns = @JoinColumn(name = "movies_id")
     )
     private List<Movie> movieList;
     @OneToMany(mappedBy = "actor",fetch = FetchType.LAZY)

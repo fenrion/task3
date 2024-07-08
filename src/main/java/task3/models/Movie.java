@@ -56,4 +56,13 @@ public class Movie {
     public void setActorList(List<Actor> actorList) {
         this.actorList = actorList;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
 }
