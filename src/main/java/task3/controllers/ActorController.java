@@ -31,7 +31,7 @@ public class ActorController {
         this.actorMapper = actorMapper;
     }
 
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> findAll() throws JsonProcessingException {
         List<Actor> actors = actorService.findAll();
         List<ActorDTO> actorDTOList = actorMapper.toActorDTOList(actors);
@@ -49,23 +49,21 @@ public class ActorController {
         }
     }
 
-    @PostMapping("/save")
+    @PostMapping()
     public ResponseEntity<HttpStatus> create(@RequestBody ActorSingleDTO actorSingleDTO){
         Actor actor = actorMapper.toActorFromActorSingleDTO(actorSingleDTO);
-        System.out.println("after mapper");
         actorService.save(actor);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
-    @PatchMapping(value = "/update/{id}",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> update(@PathVariable int id, @RequestBody ActorSingleDTO actorDTO){
         Actor actor = actorMapper.toActorFromActorSingleDTO(actorDTO);
-        System.out.println(actor);
         actorService.update(id,actor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
         actorService.removeActorById(id);
         return new ResponseEntity<>(HttpStatus.OK);
