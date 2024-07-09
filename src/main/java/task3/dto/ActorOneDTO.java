@@ -1,8 +1,5 @@
 package task3.dto;
 
-import task3.models.Movie;
-import task3.models.PhoneNumber;
-
 import java.util.List;
 
 public class ActorOneDTO {

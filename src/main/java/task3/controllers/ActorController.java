@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import task3.dto.ActorDTO;
 import task3.dto.ActorOneDTO;
 import task3.dto.ActorSingleDTO;
-import task3.dto.ActorUpdateDTO;
 import task3.mapper.ActorMapper;
 import task3.models.Actor;
 import task3.services.ActorService;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -59,6 +57,7 @@ public class ActorController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+
     @PatchMapping(value = "/update/{id}",consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> update(@PathVariable int id, @RequestBody ActorSingleDTO actorDTO){
         Actor actor = actorMapper.toActorFromActorSingleDTO(actorDTO);
@@ -66,5 +65,9 @@ public class ActorController {
         actorService.update(id,actor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) {
+        actorService.removeActorById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
